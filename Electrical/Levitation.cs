@@ -6,8 +6,6 @@ namespace Electrical
 {
   public class LevitationSettings
   {
-    internal static LevitationSettings Instance = new LevitationSettings();
-
     public float thrust = 5f;
   }
 
@@ -35,7 +33,7 @@ namespace Electrical
           hand.interactor.grabbedHandle == null)
       {
         Vector3 direction = (hand.bone.parent.position - hand.bone.position).normalized;
-        var thrustMod = LevitationSettings.Instance.thrust * Time.deltaTime * casterHand.force;
+        var thrustMod = Electrical.LevitationSettings.thrust * Time.deltaTime * casterHand.force;
         if (casterHand.caster.currentMana < 5f)
         {
           thrustMod *= 0.5f;

@@ -14,7 +14,7 @@ namespace Electrical
       var caster = __instance.interactor.bodyHand.caster;
       if (__instance.catchedHandle && caster.currentSpell && caster.currentSpell is SpellLightning)
       {
-        float manaCost = ItemChargeSettings.Instance.manaPerSec * Time.deltaTime;
+        float manaCost = Electrical.ItemChargeSettings.manaPerSec * Time.deltaTime;
         if (caster.caster.currentMana > manaCost)
         {
           caster.caster.currentMana -= manaCost;

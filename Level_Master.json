@@ -1,0 +1,28 @@
+{
+	"$type":"BS.LevelData, Assembly-CSharp",
+	"id":"Master",
+	"version":2,
+	"modes":[
+	{
+		"name":"Default",
+		"modules":[
+		{
+			"$type":"Electrical.Electrical, Electrical",
+			"itemChargeSettings":
+			{
+				"autoCharge": 0,
+				"manaPerSec": 5
+			},
+			"ragdollChargeSettings":
+			{
+				"manaPerSec": 12,
+				"damagePerSec": 7,
+				"launchManaCost": 10
+			},
+		   "levitationSettings":
+			{
+				"thrust": 5
+			}
+		}]
+	}]
+}

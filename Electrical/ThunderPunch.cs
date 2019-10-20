@@ -21,6 +21,7 @@ namespace Electrical
           // Convert damage to shock, add a bit of bonus damage
           damageStruct.damageType = Damager.DamageType.Shock;
           damageStruct.damage += 5f;
+          damageStruct.knockOutDuration = 2f;
 
           // Apply bonus knockback
           var direction = punch.rb.velocity.normalized;
@@ -31,11 +32,13 @@ namespace Electrical
           }
 
           // Trigger some lightning bolts
+          var lightningSpell = spell as SpellLightning;
+          lightningSpell.PlayClipAt(lightningSpell.startLowClip, spell.transform.position);
           int bolts = Random.Range(5, 8);
           for (int i = 0; i < bolts; ++i)
           {
             float delay = Random.Range(0.1f, 0.5f);
-            LightningBolt.QueueLightningBolt(damageStruct.hitRagdollPart.gameObject, spell as SpellLightning, delay);
+            LightningBolt.QueueLightningBolt(damageStruct.hitRagdollPart.gameObject, lightningSpell, delay);
           }
         }
       }

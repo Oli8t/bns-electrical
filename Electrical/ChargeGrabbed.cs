@@ -6,16 +6,12 @@ namespace Electrical
 {
   public class ItemChargeSettings
   {
-    internal static ItemChargeSettings Instance = new ItemChargeSettings();
-
     public bool autoCharge = true;
     public float manaPerSec = 5f;
   }
 
   public class RagdollChargeSettings
   {
-    internal static RagdollChargeSettings Instance = new RagdollChargeSettings();
-
     public float manaPerSec = 12f;
     public float damagePerSec = 7f;
     public float launchManaCost = 10f;
@@ -43,9 +39,9 @@ namespace Electrical
 
           if (hand.bodyHand.interactor.grabbedHandle.item)
           {
-            if (tryCast || ItemChargeSettings.Instance.autoCharge || hand.caster.creature != Creature.player)
+            if (tryCast || Electrical.ItemChargeSettings.autoCharge || hand.caster.creature != Creature.player)
             {
-              float manaCost = ItemChargeSettings.Instance.manaPerSec * Time.deltaTime;
+              float manaCost = Electrical.ItemChargeSettings.manaPerSec * Time.deltaTime;
               if (hand.caster.currentMana > manaCost)
               {
                 hand.caster.currentMana -= manaCost;
@@ -66,12 +62,12 @@ namespace Electrical
           }
           if (hand.bodyHand.interactor.grabbedHandle is RagdollHandle && tryCast)
           {
-            float manaCost = RagdollChargeSettings.Instance.manaPerSec * Time.deltaTime;
+            float manaCost = Electrical.RagdollChargeSettings.manaPerSec * Time.deltaTime;
             if (hand.caster.currentMana > manaCost)
             {
               var ragdollHandle = hand.bodyHand.interactor.grabbedHandle as RagdollHandle;
               DamageStruct shockDamage = spell.damageStruct;
-              shockDamage.damage = RagdollChargeSettings.Instance.damagePerSec * Time.deltaTime;
+              shockDamage.damage = Electrical.RagdollChargeSettings.damagePerSec * Time.deltaTime;
               shockDamage.hitRagdollPart = ragdollHandle.ragdollPart;
               CollisionStruct spellCollision = new CollisionStruct(shockDamage);
               ragdollHandle.ragdollPart.ragdoll.creature.health.Damage(ref spellCollision);
@@ -104,7 +100,7 @@ namespace Electrical
           caster.currentSpell is SpellLightning &&
           PlayerControl.GetHand(interactor.bodyHand.side).indexCurl > 0.5f)
       {
-        float manaCost = RagdollChargeSettings.Instance.launchManaCost;
+        float manaCost = Electrical.RagdollChargeSettings.launchManaCost;
         if (caster.caster.currentMana > manaCost)
         {
           caster.caster.currentMana -= manaCost;
@@ -113,8 +109,9 @@ namespace Electrical
           var spell = interactor.bodyHand.caster.currentSpell as SpellLightning;
           var ragdoll = __instance.ragdollPart.ragdoll;
           DamageStruct shockDamage = spell.damageStruct;
-          shockDamage.damage = RagdollChargeSettings.Instance.damagePerSec;
+          shockDamage.damage = Electrical.RagdollChargeSettings.damagePerSec;
           shockDamage.hitRagdollPart = __instance.ragdollPart;
+          shockDamage.knockOutDuration = 2f;
           CollisionStruct spellCollision = new CollisionStruct(shockDamage);
           ragdoll.creature.health.Damage(ref spellCollision);
 
@@ -125,6 +122,7 @@ namespace Electrical
           dir.Set(dir.x, 0.7f, dir.z);
 
           // Apply the force to each part with a chance of a visual lightning bolt
+          spell.PlayClipAt(spell.startLowClip, spell.transform.position);
           foreach (RagdollPart ragdollPart in __instance.ragdollPart.ragdoll.creature.ragdoll.parts)
           {
             Vector3 force = dir * 30f;
